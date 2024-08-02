@@ -4,8 +4,13 @@ use std::process;
 
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     if pattern.starts_with("[") {
-        let chars = pattern.chars().skip(1).take_while(|&c| c != ']');
-        return input_line.contains(|c| chars.clone().any(|x| x == c));
+        let mut chars = pattern.chars().skip(1).take_while(|&c| c != ']').peekable();
+        if chars.peek() == Some(&'^') {
+            let mut chars = chars.clone().skip(1);
+            return !input_line.contains(|c| chars.any(|x| x == c));
+        } else {
+            return input_line.contains(|c| chars.any(|x| x == c));
+        }
     } else if pattern.starts_with("\\d") {
         return input_line.contains(|c: char| c.is_digit(10));
     } else if pattern.starts_with("\\w") {
