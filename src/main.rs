@@ -3,7 +3,10 @@ use std::io;
 use std::process;
 
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
-    if pattern.starts_with("\\d") {
+    if pattern.starts_with("[") {
+        let chars = pattern.chars().skip(1).take_while(|&c| c != ']');
+        return input_line.contains(|c| chars.clone().any(|x| x == c));
+    } else if pattern.starts_with("\\d") {
         return input_line.contains(|c: char| c.is_digit(10));
     } else if pattern.starts_with("\\w") {
         return input_line.contains(|c: char| c.is_alphanumeric());
