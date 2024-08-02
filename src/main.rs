@@ -4,7 +4,9 @@ use std::process;
 
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     if pattern.starts_with("\\d") {
-        return input_line.chars().any(|c| c.is_digit(10));
+        return input_line.contains(|c: char| c.is_digit(10));
+    } else if pattern.starts_with("\\w") {
+        return input_line.contains(|c: char| c.is_alphanumeric());
     } else if pattern.chars().count() == 1 {
         return input_line.contains(pattern);
     } else {
